@@ -29,10 +29,18 @@ class Hangman
   end
 
   def play_game
-     display
+    display
+    get_guess
   end
 
-
+  def get_guess
+    guess = ""
+    until guess.length == 1 
+      puts "Please enter just one letter"
+      guess = gets.chomp
+    end
+  end
+  
 end
 
 game = Hangman.new 
