@@ -1,11 +1,21 @@
 class Hangman 
-  attr_accesor :word, :hint, :incorrect_letters, :num_guesses
+  attr_accessor :word, :hint, :incorrect_letters, :num_guesses
 
   def initialize 
-    @word = get_word
-    @dictionary = File.readlines('dictionary.txt')
+    @word = random_word
     @hint = display_hint 
     @incorrect_letters = []
     @num_guesses = 7
   end
+
+  def random_word
+    word_list = IO.readlines('dictionary.txt')
+    word_list.each(&:strip!).select { |word| word.length.between?(5, 12) }
+    word_list[rand(0..word_list.length)]
+  end
+
+  def display_hint
 end
+
+game = Hangman.new 
+puts game.word
