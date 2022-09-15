@@ -3,8 +3,8 @@ class Hangman
 
   def initialize 
     @word = random_word
-    @hint = display_hint 
-    @incorrect_letters = []
+    @hint = Array.new(@word.length) { '_' }
+    @incorrect_letters = ["f", "l", "h", "e"]
     @num_guesses = 7
   end
 
@@ -14,8 +14,28 @@ class Hangman
     word_list[rand(0..word_list.length)]
   end
 
-  def display_hint
+  def display
+    system('clear')
+    puts "   |====== HANGMAN =====|"
+    puts "Your incorrect guesses are: #{@incorrect_letters.join(' - ').upcase}"
+    puts "\n"
+    puts "\n"
+    puts "\n"
+    puts "    " + @hint.join(' ')
+    puts "\n"
+    puts "Choose a letter!"
+    puts "\n"
+    puts "\n"
+  end
+
+  def play_game
+     display
+  end
+
+
 end
 
 game = Hangman.new 
 puts game.word
+
+game.play_game
