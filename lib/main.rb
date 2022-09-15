@@ -29,17 +29,23 @@ class Hangman
   end
 
   def play_game
-    display
-    letter_guessed = get_guess
-    p letter_guessed
-    puts guess_in_word?(letter_guessed)
+    until @num_guesses == 0|| game_over?
+      display
+      puts @word
+      letter_guessed = get_guess
+      if guess_in_word?(letter_guessed)
+        change_hint(letter_guessed)
+      else 
+        @num_guesses -= 1
+      end
+    end
   end
 
   def get_guess
     guess = ""
     until guess.length == 1 
       puts "Please enter just one letter"
-      guess = gets.chomp
+      guess = gets.chomp.downcase
     end
     guess
   end
@@ -49,9 +55,23 @@ class Hangman
     return false unless @word.include?(guess)
   end
 
+  def change_hint(guess) 
+    @word.split(//).each_with_index do |char, index|
+      @hint[index] = guess if char == guess
+    end
+  end
+
+  def game_over?
+    if @hint.include?('_')
+      false
+    else
+      puts "Woow! You guessed the word!"
+      true
+    end
+  end
+
 end
 
-game = Hangman.new 
-puts game.word
+game = Hangman.new
 
 game.play_game
