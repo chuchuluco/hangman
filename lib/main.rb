@@ -31,11 +31,11 @@ class Hangman
   def play_game
     until @num_guesses == 0|| game_over?
       display
-      puts @word
       letter_guessed = get_guess
       if guess_in_word?(letter_guessed)
         change_hint(letter_guessed)
       else 
+        add_incorrect_letter(letter_guessed)
         @num_guesses -= 1
       end
     end
@@ -60,6 +60,10 @@ class Hangman
     @word.split(//).each_with_index do |char, index|
       @hint[index] = guess if char == guess
     end
+  end
+
+  def add_incorrect_letter(guess)
+    incorrect_letters << guess
   end
 
   def game_over?
