@@ -9,7 +9,7 @@ class Hangman
   end
 
   def random_word
-    word_list = IO.readlines('dictionary.txt')
+    word_list = File.readlines('dictionary.txt')
     word_list = word_list.each(&:strip!).select { |word| word.length.between?(5, 12) }
     word_list[rand(0..word_list.length)]
   end
@@ -18,6 +18,7 @@ class Hangman
     system('clear')
     puts "   |====== HANGMAN =====|"
     puts "Your incorrect guesses are: #{@incorrect_letters.join(' - ').upcase}"
+    puts "Number of guesses left: #{@num_guesses}"
     puts "\n"
     puts "\n"
     puts "\n"
