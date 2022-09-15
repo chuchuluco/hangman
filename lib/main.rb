@@ -4,7 +4,7 @@ class Hangman
   def initialize 
     @word = random_word
     @hint = Array.new(@word.length) { '_' }
-    @incorrect_letters = ["f", "l", "h", "e"]
+    @incorrect_letters = []
     @num_guesses = 7
   end
 
@@ -30,7 +30,9 @@ class Hangman
 
   def play_game
     display
-    get_guess
+    letter_guessed = get_guess
+    p letter_guessed
+    puts guess_in_word?(letter_guessed)
   end
 
   def get_guess
@@ -39,8 +41,14 @@ class Hangman
       puts "Please enter just one letter"
       guess = gets.chomp
     end
+    guess
   end
   
+  def guess_in_word?(guess)
+    return true if @word.include?(guess)
+    return false unless @word.include?(guess)
+  end
+
 end
 
 game = Hangman.new 
