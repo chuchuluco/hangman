@@ -10,7 +10,7 @@ class Hangman
 
   def random_word
     word_list = IO.readlines('dictionary.txt')
-    word_list.each(&:strip!).select { |word| word.length.between?(5, 12) }
+    word_list = word_list.each(&:strip!).select { |word| word.length.between?(5, 12) }
     word_list[rand(0..word_list.length)]
   end
 
@@ -39,6 +39,7 @@ class Hangman
         @num_guesses -= 1
       end
     end
+    end_game
   end
 
   def get_guess
@@ -65,9 +66,16 @@ class Hangman
     if @hint.include?('_')
       false
     else
-      puts "Woow! You guessed the word!"
       true
     end
+  end
+
+  def end_game
+    system('clear')
+    if @num_guesses.zero?
+      puts "Oh no you Died! The Word was #{@word}"
+    end
+    puts "You won! Nice!" if game_over?
   end
 
 end
