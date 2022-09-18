@@ -1,4 +1,5 @@
 class Hangman 
+  require 'json'
   attr_accessor :word, :hint, :incorrect_letters, :num_guesses
 
   def initialize 
@@ -47,6 +48,7 @@ class Hangman
   end
 
   def play_game
+    load_game?
     until @num_guesses == 0|| game_over?
       display
       letter_guessed = get_guess
@@ -63,8 +65,12 @@ class Hangman
   def get_guess
     guess = ""
     until guess.length == 1 
-      puts "Please enter just one letter"
-      guess = gets.chomp.downcase
+      puts "Please enter just one letter or write 'save' to save the game."
+        guess = gets.chomp.downcase
+        if guess == "save"
+          save_game
+          guess = get_guess
+        end
     end
     guess
   end
@@ -100,6 +106,57 @@ class Hangman
     puts "You won! Nice!" if game_over?
   end
 
+  def set_filename
+    puts "Enter the filename."
+    filename = gets.chomp
+    if Dir.entries('./savefiles').include?(filename)
+      puts "The #{filename} already exists, please choose a different name."
+      filename = gets.chomp
+    end
+    system('clear')
+    filename
+  end
+
+  def save_game
+    puts "Your saved files are:"
+    puts Dir.entries('./savefiles')
+    filename = set_filename
+    File.open("./savefiles/#{filename}", 'w') do |f|
+      f.write(to_json)
+      f.write('')
+    end
+    system('clear')
+    display
+  end
+
+  def load_game?
+    puts 'Do you want to load a game?(y/n)'
+    input = gets.chomp
+    if input.downcase == 'y'
+      load_game
+    elsif input.downcase == 'n'
+      system('clear')
+      return
+    else
+      puts 'Thats not an option'
+      load_game?
+    end
+    system('clear')
+  end
+
+  def load_game
+    puts "Which file do you want to load?\n\n"
+    puts Dir.entries('./savefiles')
+    input = gets.chomp
+    begin
+      file = File.open("./savefiles/#{input}", 'r')
+      content = file.read
+      from_json(content)
+    rescue Errno::ENOENT
+      puts 'Only enter existing saves!'
+      load_game
+    end
+  end
 end
 
 game = Hangman.new
