@@ -8,6 +8,23 @@ class Hangman
     @num_guesses = 7
   end
 
+  def to_json
+    JSON.dump({
+      word: @word,
+      hint: @hint,
+      incorrect_letters: @incorrect_letters,
+      num_guesses: @num_guesses,
+    })
+  end
+
+  def from_json(string)
+    data = JSON.parse string
+    @word = data['word']
+    @hint = data['hint']
+    @incorrect_letters = data['incorrect_letters']
+    @num_guesses = data['num_guesses']
+  end
+
   def random_word
     word_list = File.readlines('dictionary.txt')
     word_list = word_list.each(&:strip!).select { |word| word.length.between?(5, 12) }
